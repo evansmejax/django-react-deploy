@@ -31,7 +31,7 @@ def task():
         # html_updated = ''.join(html_pieces)
         # html = html_updated
         f = open(index_out, 'w')
-        f.write(html_updated)
+        f.write(html)
         f.close()
 
   
