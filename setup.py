@@ -39,21 +39,8 @@ def task():
     # build npm
     subprocess.check_call(f'npm run build --prefix {frontend}', shell=True)
     # move index file
-    index_in = normalizePath(os.path.join(BASE_DIR,f'{frontend}/build/index.html'))
-    index_out = normalizePath(os.path.join(BASE_DIR,f'{backend}/templates/index.html'))
     static_in = normalizePath(os.path.join(BASE_DIR,f'{frontend}/build/static'))
     static_out = normalizePath(os.path.join(BASE_DIR,f'{backend}/static'))
-    if os.path.isfile(index_in):
-        file = codecs.open(index_in, "r", "utf-8")
-        html = file.read()
-        # uncomment this block if you have django-seo-ok package
-        html_pieces = html.split('<head>')
-        html_pieces = [html_pieces[0],'{% load seo %}','<head>','{% get_seo_data request.seo %}',html_pieces[1]]
-        html_updated = ''.join(html_pieces)
-        html = html_updated
-        f = open(index_out, 'w')
-        f.write(html)
-        f.close()
 
     # delete everything in static out
     if os.path.isdir(static_out):
