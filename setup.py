@@ -6,8 +6,26 @@ import codecs
 import shutil
 import subprocess
 
+def updateSettings(inputf,mapping):
+    #read input file
+    fin = open(inputf, "rt")
+    #read file contents to string
+    data = fin.read()
+    #replace all occurrences of the required string
+    for k,v in mapping.items():
+        data = data.replace(k, v)
+    #close the input file
+    fin.close()
+    #open the input file in write mode
+    fin = open(inputf, "wt")
+    #overrite the input file with the resulting data
+    fin.write(data)
+    #close the file
+    fin.close()
+
 frontend = "frontend"
 backend = "backend"
+settings = "backend/flomtech/settings.py"
 
 def normalizePath(path):
     return os.path.normpath(path).replace(os.sep, "/")
@@ -37,19 +55,25 @@ def task():
         f.write(html)
         f.close()
 
-    # delete media files
-    media = normalizePath(os.path.join(BASE_DIR,f'{backend}/media'))
-    shutil.rmtree(media)
-    os.mkdir(media)
-
     # delete everything in static out
     if os.path.isdir(static_out):
         shutil.rmtree(static_out)
         shutil.copytree(static_in, static_out)
+    
+    
+    updateSettings(settings,{
+        'DEBUG = True': 'DEBUG = False', 
+    })
+    
     temp = 'backend_b'
-    shutil.copytree(backend , temp ,ignore=shutil.ignore_patterns(".git"))
+
+    shutil.copytree(backend , temp ,ignore=shutil.ignore_patterns(".git",'media'))
     shutil.make_archive('output', 'zip', temp)
     shutil.rmtree(temp)
+    
+    updateSettings(settings,{
+        'DEBUG = False': 'DEBUG = True', 
+    })
 
 if __name__ == '__main__':
     start_time = time.time()
