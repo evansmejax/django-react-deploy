@@ -25,7 +25,7 @@ def updateSettings(inputf,mapping):
 
 frontend = "frontend"
 backend = "backend"
-settings = "backend/flomtech/settings.py"
+settings = "backend/core/settings.py"
 
 def normalizePath(path):
     return os.path.normpath(path).replace(os.sep, "/")
